@@ -1,0 +1,219 @@
+from flask import Flask, render_template,request,flash,redirect,url_for,session
+import sqlite3
+from flask_mail import Mail,Message
+from random import randint
+
+
+
+
+
+app = Flask(__name__)
+app.secret_key="123"
+mail = Mail()
+
+app.config.update(
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = '465',
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = 'agyawali78@gmail.com',
+    MAIL_PASSWORD = ''
+)
+mail.init_app(app)
+
+
+
+con=sqlite3.connect("database.db")
+con.execute("create table if not exists customer(sno integer primary key,firstname text,lastname text,email text unique,phone integer,password text,bio text,twitter text,facebook text,instagram text,github text,whatsapp text)")
+con.close()
+
+
+@app.route('/')
+def index():
+    
+    return render_template('index.html')
+    
+@app.route("/questions/BLE-Model-Questions")
+def BLE():
+    return render_template("BLE.html")
+
+@app.route("/questions/SEE-Model-Questions")
+def SEE():
+    return render_template("SEE.html")
+
+@app.route("/questions/12th-Boards-Model-Questions")
+def XII():
+    return render_template("XII.html")
+    
+@app.route("/oops")
+def oops():
+    return render_template("oops.html")
+
+@app.route("/privacy-policy")
+def pp():
+    
+    return render_template("pp.html")
+
+@app.route('/login',methods=["GET","POST"])
+def login():
+    session['email']=""
+    if session['email']!="":
+    	flash('You are already logged in','danger')
+    	return redirect(url_for("dashboard"))
+    	
+    else:
+    	if request.method=='POST':
+    			    email=request.form['email']
+    			    password=request.form['password']
+    			    con=sqlite3.connect("database.db")
+    			    con.row_factory=sqlite3.Row
+    			    cur=con.cursor()
+    			    cur.execute("select * from customer where email=? and password=?",(email,password))
+    			    data=cur.fetchone()
+    			    if data:
+    			    	session['sno']=data['sno']
+    			    	session['bio']=data['bio']
+    			    	session['twitter']=data['bio']
+    			    	session['instagram']=data['instagram']
+    			    	session['facebook']=data['facebook']
+    			    	session['github']=data['github']
+    			    	session['whatsapp']=data['whatsapp']
+    			    	session['firstname']=data['firstname']
+    			    	session['lastname']=data['lastname']
+    			    	session["email"]=data["email"]
+    			    	session["password"]=data["password"]
+    			    	return redirect("dashboard")
+           			# return (session['firstname'])
+    			    else:
+       			     flash("Username and Password Mismatch","danger")
+    
+    
+    
+    return render_template('login.html')
+
+
+@app.route('/dashboard',methods=["GET","POST"])
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route('/signup',methods=['POST','GET'])
+def signup():
+     	
+     	if session['email']!="":
+     		flash('Your are already logged in','danger')
+     		return redirect(url_for("dashboard"))
+     		
+     		
+     	
+     	else:
+     		if request.method=='POST':
+     			try:
+     				firstname=request.form['firstname']
+     				lastname=request.form['lastname']
+     				email = request.form['email']
+   		  		phone=request.form['phnnbr']
+     				password=request.form['password1']
+   	  			cpass= request.form['password2']
+     				con=sqlite3.connect("database.db")
+     				cur=con.cursor()
+     				if password==cpass:
+     					cur.execute("insert into customer(firstname,lastname,email,phone,password)values(?,?,?,?,?)",(firstname,lastname,email,phone,password))
+     					con.commit()
+     					flash("Successfully Registered",'success')
+     				else:
+     					flash('Password amd Confirm Password do not match','danger')
+     		
+     				
+     		
+    		
+     		
+     		
+     	
+     		
+     			except:
+     				flash("Already registered in this email",'danger')
+     	
+    	 		finally:
+     				con.close()
+     		
+     		
+     	return render_template('signup.html')
+    
+
+    
+    
+@app.route("/edit-profile",methods=["GET","POST"])
+def edit():
+    if request.method=="POST":
+    	try:
+    		sno=session['sno']
+    		bio=request.form['bio']
+  	  	facebook=request.form['facebook']
+ 	   	instagram=request.form['instagram']
+	    	twitter=request.form['twitter']
+   	 	github=request.form['github']
+  	  	whatsapp=request.form['whatsapp']
+   	 	con=sqlite3.connect("database.db")
+ 	   	cur=con.cursor()
+  	  	cur.execute("UPDATE customer SET  bio=?,facebook=?,instagram=?,twitter=?,github=?,whatsapp=? WHERE sno = ?;",(bio,facebook,instagram,twitter,github,whatsapp,sno))
+    		con.commit()
+    		session['bio']=bio
+   	 	session['facebook']=facebook
+    		session['instagram']=instagram
+    		session['twitter']=twitter
+   	 	session['github']=github
+  	  	session['whatsapp']=whatsapp
+  	  	flash("Successfully Updated",'success')
+  	  	return redirect(url_for("dashboard"))
+    	except:
+    		flash('Update failed','danger')
+    		
+    	
+    return render_template("editprofile.html")
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+    
+otp=randint(000000,999999)
+   
+@app.route('/dashboard/edit-account',methods=['GET','POST'])
+def editaccount():
+    if request.method=='POST':
+    	email=request.form['email']
+    	phone=request.form['phone']
+    	password=request.form['password']
+    	ma="Dear "+session['firstname']+" ! Your OTP from  NEG.EDU.NP"
+    	
+    	msg=Message("otp",
+    	sender = "publicgyawali@gmail.com",
+    	recipients = [session['email']]
+    	)
+    	msg.body=str(otp)
+    	mail.send(msg)
+    	
+    	return redirect(url_for("validate"))
+    	
+    return render_template('editaccount.html')
+    
+   
+   
+   
+   
+
+    
+    
+@app.route('/dashboard/validate',methods=['GET','POST'])
+def validate():
+    if request.method=="POST":
+    	user_otp=request.form['otp']
+    	if otp==int(user_otp):
+        	return redirect(url_for("dashboard"))
+    	else:
+    		#return "<h3>Please Try Again</h3>"
+    		return otp
+    return render_template('verify.html')
+    
+
+if __name__ == '__main__':
+    app.run(debug=True)
