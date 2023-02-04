@@ -54,7 +54,6 @@ a.nav-link.active{
    
 }
 
-
       
 .brand-slogan{
     color: var(--secondary-color);
@@ -138,7 +137,7 @@ color:var(--primary-color);
 
 
 }
-#search-ble,#search-xii,#search-see{
+#search-ble,#search-xii,#search-see,.edit{
 border:5px. solid var(--secondary-color);
 width:92%;
 background-color:var(--primary-color);
@@ -154,7 +153,7 @@ color:var(--Secondary-color);
 border-bottom-style: groove;
 
 }
-#search-ble:focus,#search-xii:focus,#search-see:focus,#search-index:focus{
+#search-ble:focus,#search-xii:focus,#search-see:focus,#search-index:focus,.edit:focus{
 outline:none;
 
 }
@@ -175,4 +174,9 @@ background:var(--primary-color);
 width:25%;
 border-bottom-style: groove;
 margin-left:15px;
+}
+tr:hover,tr:active{
+background-color:var(--secondary-color);
+color:var(--primary-color);
+
 }
