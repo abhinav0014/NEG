@@ -173,16 +173,16 @@ def edit():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for("index"))
+    return redirect(url_for("login"))
     
 otp=randint(000000,999999)
    
 @app.route('/dashboard/edit-account',methods=['GET','POST'])
 def editaccount():
     if request.method=='POST':
-    	email=request.form['email']
-    	phone=request.form['phone']
-    	password=request.form['password']
+    	editemail=request.form['email']
+    	editphone=request.form['phone']
+    	editpassword=request.form['password']
     	ma="Dear "+session['firstname']+" ! Your OTP from  NEG.EDU.NP"
     	
     	msg=Message("otp",
@@ -191,6 +191,10 @@ def editaccount():
     	)
     	msg.body=str(otp)
     	mail.send(msg)
+    	session['editemail']=editemail
+    	session['editphone']=editphone
+    	session['editpassword']=editpassword
+    	
     	
     	return redirect(url_for("validate"))
     	
@@ -208,7 +212,33 @@ def validate():
     if request.method=="POST":
     	user_otp=request.form['otp']
     	if otp==int(user_otp):
-        	return redirect(url_for("dashboard"))
+    	   	try:
+    	   		sno=session['sno']
+    	   		editemail=session['editemail']
+    		   	editphone=session['editphone']
+    	 	  	editpassword=session['editpassword']
+    		   	con=sqlite3.connect("database.db")
+    		   	cur=con.cursor()
+    		   	cur.execute("UPDATE customer SET  email=?,phone=?,password=? WHERE sno = ?;",(editemail,editphone,editpassword,sno))
+    		   	session['email']=editemail
+    	   		session['phone']=editphone
+    		   	session['password']=editpassword
+    		   	flash('Account Updated','success')
+    		   	flash('Session expired! please re-login','danger')
+    		   	return redirect(url_for('logout'))
+    		   	
+    		   	
+    		   	
+    		   	
+    		   	
+    		   except:
+    		   	flash('Update failed','danger')
+    		   	
+    		   	
+    		   	
+    		   finally:
+  	  	
+        	#return redirect(url_for("dashboard"))
     	else:
     		#return "<h3>Please Try Again</h3>"
     		return otp
