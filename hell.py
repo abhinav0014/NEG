@@ -106,34 +106,26 @@ def signup():
      	
      	else:
      		if request.method=='POST':
-     			try:
-     				firstname=request.form['firstname']
-     				lastname=request.form['lastname']
-     				email = request.form['email']
-   		  		phone=request.form['phnnbr']
-     				password=request.form['password1']
-   	  			cpass= request.form['password2']
-     				con=sqlite3.connect("database.db")
-     				cur=con.cursor()
-     				if password==cpass:
-     					cur.execute("insert into customer(firstname,lastname,email,phone,password)values(?,?,?,?,?)",(firstname,lastname,email,phone,password))
-     					con.commit()
-     					flash("Successfully Registered",'success')
-     				else:
-     					flash('Password amd Confirm Password do not match','danger')
-     		
-     				
-     		
-    		
-     		
-     		
+     				try:
+     					firstname=request.form['firstname']
+     					lastname=request.form['lastname']
+     					email = request.form['email']
+   		  			phone=request.form['phnnbr']
+     					password=request.form['password1']
+   	  				cpass= request.form['password2']
+     					con=sqlite3.connect("database.db")
+     					cur=con.cursor()
+     					if password==cpass:
+     						cur.execute("insert into customer(firstname,lastname,email,phone,password)values(?,?,?,?,?)",(firstname,lastname,email,phone,password))
+     						con.commit()
+     						flash("Successfully Registered",'success')
+     					else:
+     						flash('Password amd Confirm Password do not match','danger')
+     				except:
+     					flash("Already registered in this email",'danger')
      	
-     		
-     			except:
-     				flash("Already registered in this email",'danger')
-     	
-    	 		finally:
-     				con.close()
+    	 			finally:
+     					con.close()
      		
      		
      	return render_template('signup.html')
@@ -212,31 +204,26 @@ def validate():
     if request.method=="POST":
     	user_otp=request.form['otp']
     	if otp==int(user_otp):
-    	   	try:
-    	   		sno=session['sno']
-    	   		editemail=session['editemail']
-    		   	editphone=session['editphone']
-    	 	  	editpassword=session['editpassword']
-    		   	con=sqlite3.connect("database.db")
-    		   	cur=con.cursor()
-    		   	cur.execute("UPDATE customer SET  email=?,phone=?,password=? WHERE sno = ?;",(editemail,editphone,editpassword,sno))
-    		   	session['email']=editemail
-    	   		session['phone']=editphone
-    		   	session['password']=editpassword
-    		   	flash('Account Updated','success')
-    		   	flash('Session expired! please re-login','danger')
-    		   	return redirect(url_for('logout'))
+    		   	try:
+    	   			sno=session['sno']
+    	   			editemail=session['editemail']
+    			   	editphone=session['editphone']
+    	 	 	 	editpassword=session['editpassword']
+    			   	con=sqlite3.connect("database.db")
+    		   		cur=con.cursor()
+    		   		cur.execute("UPDATE customer SET  email=?,phone=?,password=? WHERE sno = ?;",(editemail,editphone,editpassword,sno))
+    		   		session['email']=editemail
+    	   			session['phone']=editphone
+    			   	session['password']=editpassword
+    		   		flash('Account Updated','success')
+    			   	flash('Session expired! please re-login','danger')
+    		   		return redirect(url_for('logout'))
+    		   	except:
+    		   		flash('Update failed','danger')
     		   	
     		   	
     		   	
-    		   	
-    		   	
-    		   except:
-    		   	flash('Update failed','danger')
-    		   	
-    		   	
-    		   	
-    		   finally:
+    		   
   	  	
         	#return redirect(url_for("dashboard"))
     	else:
