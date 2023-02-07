@@ -1,4 +1,4 @@
-function myFunction() {
+function indFunction() {
   var input, filter, table, tr, td, i, txtValue, show;
   input = document.getElementById("search-index");
   filter = input.value.toUpperCase();
@@ -13,42 +13,33 @@ function myFunction() {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
-      //  show.style.display = "";
+        
+      
       }
     }
   }
 }
 
-function myFun() {
-var getfilter, filtervalue, filtertext, xii, ble , see;
-xii = document.getElementsByClassName("xii-index");
-see = document.getElementsByClassName("see-index");
-ble = document.getElementsByClassName("ble-index");
-getfilter = document.getElementById("gradefilter");
-filtervalue = e.value;
-filtertext = e.options[e.selectedIndex].text;
-
-if (filtervalue == "8"){
-xii.style.display = "none";
-see.style.display = "none";
-
-} else if(filter value == "hehe"){
-ble.style.display = "";
-xii.style.display = "";
-see.style.display = "";
-} else if(filtervalue == "10") {
-ble.style.display = "none";
-xii.style.display = "none";
-
-} else if(filtervalue == "12"){
-see.style.display = "none";
-ble.style.display = "none";
-
-} else{
-xii.style.display = "none";
-ble.style.display = "none";
-see.style.display = "none";
-}
 
 
-}
+$(document).ready(function() {
+    function addRemoveClass(theRows) {
+        theRows.removeClass("odd even");
+        theRows.filter(":odd").addClass("odd");
+        theRows.filter(":even").addClass("even");
+    }
+    var rows = $("table#myTable tr:not(:first-child)");
+    addRemoveClass(rows);
+    $("#dropdownField").on("change", function() {
+        var selected = this.value;
+        if (selected != "All") {
+            rows.filter("[position=" + selected + "]").show();
+            rows.not("[position=" + selected + "]").hide();
+            var visibleRows = rows.filter("[position=" + selected + "]");
+            addRemoveClass(visibleRows);
+        } else {
+            rows.show();
+           addRemoveClass(rows);
+        }
+    });
+});
