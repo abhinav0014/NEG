@@ -27,9 +27,10 @@ con.execute("create table if not exists customer(sno integer primary key,firstna
 con.close()
 
 
+
 @app.route('/')
 def index():
-    
+    session['email']="1"
     return render_template('index.html')
     
 @app.route("/questions/BLE-Model-Questions")
@@ -55,12 +56,8 @@ def pp():
 
 @app.route('/login',methods=["GET","POST"])
 def login():
-    session['email']=""
-    if session['email']!="":
-    	flash('You are already logged in','danger')
-    	return redirect(url_for("dashboard"))
-    	
-    else:
+
+    if session['email']=="test":
     	if request.method=='POST':
     			    email=request.form['email']
     			    password=request.form['password']
@@ -85,6 +82,14 @@ def login():
            			# return (session['firstname'])
     			    else:
        			     flash("Username and Password Mismatch","danger")
+    else:
+    	flash('You are already logged in','danger')
+    	return redirect(url_for("dashboard"))
+    
+    
+    	
+       			     
+	
     
     
     
@@ -93,12 +98,15 @@ def login():
 
 @app.route('/dashboard',methods=["GET","POST"])
 def dashboard():
+    if session['email']=='test':
+    	flash("You're not logged in",'danger')
+    	return redirect(url_for("login"))
     return render_template("dashboard.html")
 
 @app.route('/signup',methods=['POST','GET'])
 def signup():
      	
-     	if session['email']!="":
+     	if session['email']!="test":
      		flash('Your are already logged in','danger')
      		return redirect(url_for("dashboard"))
      		
@@ -165,6 +173,7 @@ def edit():
 @app.route('/logout')
 def logout():
     session.clear()
+    session['email']="test"
     return redirect(url_for("login"))
     
 otp=randint(000000,999999)
@@ -217,7 +226,9 @@ def validate():
     			   	session['password']=editpassword
     		   		flash('Account Updated','success')
     			   	flash('Session expired! please re-login','danger')
-    		   		return redirect(url_for('logout'))
+    			   	session.clear()
+    			   	session['email']="test"
+    		   		return redirect(url_for("login"))
     		   	except:
     		   		flash('Update failed','danger')
     		   	
@@ -230,6 +241,17 @@ def validate():
     		#return "<h3>Please Try Again</h3>"
     		return otp
     return render_template('verify.html')
+    
+    
+    
+    
+    
+    
+@app.route('/tester',methods=["GET","POST"])
+def tester():
+    if session['email']!="test":
+    	return "hurray ure loggend in"
+    return "sry failed"
     
 
 if __name__ == '__main__':
