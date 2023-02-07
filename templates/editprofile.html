@@ -2,9 +2,12 @@
 {% block head %}
 <script src="{{ url_for('static', filename='js/editprofile.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/editprofile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/editaccount.css') }}">
       {% endblock head %}
 {% block title %}Edit Profile{% endblock title %} 
 {% block body %}
+<div class="epcont">
+<h2>Edit Profile</h2>
 <form action="" method="post">
 <ul>
 <li>Bio</li>
@@ -23,5 +26,5 @@
 </ul>
 <input class="btn"type="submit" value="Update">
 </form>
-
+</div>
 {% endblock body %}
