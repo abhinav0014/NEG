@@ -16,7 +16,7 @@ app.config.update(
     MAIL_PORT = '465',
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'agyawali78@gmail.com',
-    MAIL_PASSWORD = 'oiqzxkszuqsqespy'
+    MAIL_PASSWORD = ''
 )
 mail.init_app(app)
 
@@ -30,7 +30,6 @@ con.close()
 
 @app.route('/')
 def index():
-    session['email']="1"
     return render_template('index.html')
     
 @app.route("/questions/BLE-Model-Questions")
@@ -78,6 +77,7 @@ def login():
     			    	session['lastname']=data['lastname']
     			    	session["email"]=data["email"]
     			    	session["password"]=data["password"]
+    			    	session["phone"]=data["phone"]
     			    	return redirect("dashboard")
            			# return (session['firstname'])
     			    else:
@@ -141,7 +141,7 @@ def signup():
 
     
     
-@app.route("/edit-profile",methods=["GET","POST"])
+@app.route("/dashboard/edit-profile",methods=["GET","POST"])
 def edit():
     if request.method=="POST":
     	try:
@@ -186,11 +186,11 @@ def editaccount():
     	editpassword=request.form['password']
     	ma="Dear "+session['firstname']+" ! Your OTP from  NEG.EDU.NP"
     	
-    	msg=Message("ma",
+    	msg=Message(ma,
     	sender = "publicgyawali@gmail.com",
     	recipients = [session['email']]
     	)
-    	msg.body=str(otp)
+    	msg.body=ma+"             														"+str(otp)
     	mail.send(msg)
     	session['editemail']=editemail
     	session['editphone']=editphone
@@ -218,7 +218,6 @@ def validate():
     	otp5=request.form['otp5']
     	otp6=request.form['otp6']
     	user_otp=otp1+otp2+otp3+otp4+otp5+otp6
-    	return str(user_otp)
     	if otp==int(user_otp):
     		   	try:
     	   			sno=session['sno']
@@ -228,6 +227,7 @@ def validate():
     			   	con=sqlite3.connect("database.db")
     		   		cur=con.cursor()
     		   		cur.execute("UPDATE customer SET  email=?,phone=?,password=? WHERE sno = ?;",(editemail,editphone,editpassword,sno))
+    		   		con.commit()
     		   		session['email']=editemail
     	   			session['phone']=editphone
     			   	session['password']=editpassword
@@ -245,8 +245,8 @@ def validate():
   	  	
         	#return redirect(url_for("dashboard"))
     	else:
-    		#return "<h3>Please Try Again</h3>"
-    		return otp
+    		return "<h3><a href='/dashboard/edit-account'>Wrong Verification Code Please try again!</a></h3>"
+    		
     return render_template('verify.html')
     
     
