@@ -1,4 +1,13 @@
-      
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Noto+Sans:wght@400;600;700&family=Open+Sans:wght@400;500;600;700&family=Roboto+Condensed&display=swap');
+/*
+
+font-family: 'Montserrat', sans-serif;
+font-family: 'Noto Sans', sans-serif;
+font-family: 'Open Sans', sans-serif;
+font-family: 'Roboto Condensed', sans-serif;
+
+
+*/
       
       :root{
         --primary-color:white;
@@ -7,6 +16,8 @@
         --nav-fade-color:rgba(0,0,0,.9);
         --footer-hello-color:black;
         --nav-active-color:-webkit-linear-gradient(right, #a445b2, #fa4299, #a445b2, #fa4299);
+        --edit-color:#e6e6e6;
+        --edit-bg:white;
 
       }
       .dark-theme{
@@ -16,11 +27,31 @@
         --nav-fade-color:rgb(202, 200, 200);
         --footer-hello-color:rgb(138, 138, 138);
         --nav-active-color:-webkit-linear-gradient(right, #a445b2, #fa4299, #a445b2, #fa4299); 
+        --edit-color:black;
+        --edit-bg:#333333;
 
       }
+      
       body{
         background-color: var(--primary-color);
         color: var(--secondary-color);
+        
+      }
+      h1,h2,h3,h4,h5,h6{
+      font-family: 'Noto Sans', sans-serif;
+      font-weight:700;
+      }
+      p{
+      font-family: 'Noto Sans', sans-serif;
+      font-weight:600;
+      }
+      table,input[type=text],select{
+      font-family: 'Open Sans', sans-serif;
+      font-weight:600;
+      }
+      a,li{
+      font-family: 'Montserrat', sans-serif;
+      font-weight:500;
       }
       .navbar navbar-expand-lg navbar-light bg-light{
         background-color: var(--nav-color);
@@ -137,7 +168,7 @@ color:var(--primary-color);
 
 
 }
-#search-ble,#search-xii,#search-see,.edit{
+#search-ble,#search-xii,#search-see{
 border:5px. solid var(--secondary-color);
 width:92%;
 background-color:var(--primary-color);
@@ -153,7 +184,7 @@ color:var(--Secondary-color);
 border-bottom-style: groove;
 
 }
-#search-ble:focus,#search-xii:focus,#search-see:focus,#search-index:focus,.edit:focus{
+#search-ble:focus,#search-xii:focus,#search-see:focus,#search-index:focus{
 outline:none;
 
 }
