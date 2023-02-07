@@ -16,7 +16,7 @@ app.config.update(
     MAIL_PORT = '465',
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'agyawali78@gmail.com',
-    MAIL_PASSWORD = ''
+    MAIL_PASSWORD = 'oiqzxkszuqsqespy'
 )
 mail.init_app(app)
 
@@ -186,7 +186,7 @@ def editaccount():
     	editpassword=request.form['password']
     	ma="Dear "+session['firstname']+" ! Your OTP from  NEG.EDU.NP"
     	
-    	msg=Message("otp",
+    	msg=Message("ma",
     	sender = "publicgyawali@gmail.com",
     	recipients = [session['email']]
     	)
@@ -211,7 +211,14 @@ def editaccount():
 @app.route('/dashboard/validate',methods=['GET','POST'])
 def validate():
     if request.method=="POST":
-    	user_otp=request.form['otp']
+    	otp1=request.form['otp1']
+    	otp2=request.form['otp2']
+    	otp3=request.form['otp3']
+    	otp4=request.form['otp4']
+    	otp5=request.form['otp5']
+    	otp6=request.form['otp6']
+    	user_otp=otp1+otp2+otp3+otp4+otp5+otp6
+    	return str(user_otp)
     	if otp==int(user_otp):
     		   	try:
     	   			sno=session['sno']
