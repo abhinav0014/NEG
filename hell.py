@@ -68,7 +68,7 @@ def login():
     			    if data:
     			    	session['sno']=data['sno']
     			    	session['bio']=data['bio']
-    			    	session['twitter']=data['bio']
+    			    	session['twitter']=data['twitter']
     			    	session['instagram']=data['instagram']
     			    	session['facebook']=data['facebook']
     			    	session['github']=data['github']
