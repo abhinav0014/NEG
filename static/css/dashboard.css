@@ -27,6 +27,7 @@
   position: relative;
   margin-top: -75px;
   display: block;
+  padding:4px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 100px;
@@ -34,6 +35,7 @@
   transition-duration: 0.4s;
   transition-property: transform;
   background-color:var(--secondary-color);
+  object-fit: cover;
 }
 .editprofile,.editaccount{
 background:var(--primary-color);
@@ -79,6 +81,6 @@ border-radius:10px;
 }
 
 .icons a:hover{
-  color: #000;
+  color: var(--primary-color);
   transform: scale(1.5);
 }
