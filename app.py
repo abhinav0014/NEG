@@ -251,15 +251,6 @@ def validate():
     
     
     
-    
-    
-    
-@app.route('/tester',methods=["GET","POST"])
-def tester():
-    if session['email']!="test":
-    	return "hurray ure loggend in"
-    return "sry failed"
-    
 
 if __name__ == '__main__':
     app.run()
