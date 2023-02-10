@@ -1,1 +1,1 @@
-web: gunicorn hell:app
+web: gunicorn app:app
